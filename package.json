@@ -18,10 +18,8 @@
   },
   "homepage": "https://github.com/severo/tip_by_domain_renewal#readme",
   "dependencies": {
-    "d3-dsv": "^1.1.1",
     "mustache": "^3.1.0",
     "standard": "^14.3.1",
-    "whois": "^2.11.0",
     "whois-api": "^1.0.2"
   }
 }
