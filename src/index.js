@@ -39,8 +39,11 @@ const addDateToRow = async row => {
   return row
 }
 
-const writeHtml = (html, filename) => {
-  fs.writeFile(filename, html)
+const writeHtml = async (html, dir, filename) => {
+  await fs.mkdir(dir, { recursive: true }, (err) => {
+    if (err) throw err
+  })
+  await fs.writeFile(dir + '/' + filename, html)
     .then(() => console.log('The file was saved!'))
     .catch(console.log)
 }
@@ -53,7 +56,7 @@ const run = async () => {
   const html = Mustache.render(template, {
     domains: domainsOK.sort((a, b) => a.daysLeft > b.daysLeft)
   })
-  writeHtml(html, 'public/index.html')
+  await writeHtml(html, 'public', 'index.html')
 }
 
 run()
