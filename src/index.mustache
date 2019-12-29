@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Paye ton domaine</title>
+    <!-- <link rel="icon" type="image/png" href="/favicon.png" /> -->
+    <!-- <link rel="stylesheet" href="/bundle.css" />
+    <script defer src="/bundle.js"></script> -->
+    <style>
+    .past {color: red}
+    .urgent {color: orange}
+    .soon {color: yellow}
+    .ok {color: green}
+
+    body {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Paye ton domaine</h1>
+
+    <ul>
+{{#domains}}
+  <li>
+    <article>
+      <h4>
+        <a href='{{url}}'>{{name}}</a>
+      </h4>
+      <span class="{{class}}" title="{{expirationDate}}">{{daysLeft}} jours</span>
+      <span>{{domain}}</span>
+      <p>{{description}}</p>
+    </article>
+  </li>
+{{/domains}}
+</ul>
+  </body>
+</html>
