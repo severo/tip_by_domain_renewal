@@ -10,5 +10,17 @@
     "name": "Visionscarto",
     "description": "Réseau indépendant de recherche sur les cartes et les représentations",
     "url": "https://visionscarto.net"
+  },
+  {
+    "domain": "seenthis.net",
+    "name": "Seenthis",
+    "description": "Du short-blogging sans limite de caractères. De la recommandation de liens. Des automatismes pour rédiger facilement vos messages. Des forums sous chaque billet. De la veille d’actualité. Une thématisation avancée.",
+    "url": "https://seenthis.net"
+  },
+  {
+    "domain": "framasoft.net",
+    "name": "Framasoft",
+    "description": "Changer le monde, un octet à la fois",
+    "url": "https://framasoft.org"
   }
 ]
