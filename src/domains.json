@@ -22,5 +22,11 @@
     "name": "Framasoft",
     "description": "Changer le monde, un octet à la fois",
     "url": "https://framasoft.org"
+  },
+  {
+    "domain": "laquadrature.net",
+    "name": "La Quadrature du Net",
+    "description": "La Quadrature du Net promeut et défend les libertés fondamentales dans l’environnement numérique. L’association lutte contre la censure et la surveillance, que celles-ci viennent des États ou des entreprises privées. Elle questionne la façon dont le numérique et la société s’influencent mutuellement. Elle œuvre pour un Internet libre, décentralisé et émancipateur.",
+    "url": "https://laquadrature.net"
   }
 ]
