@@ -1,11 +1,23 @@
 # README
 
-First install:
+This small software is used to generate the website https://rednegra.net/payetondomaine/.
+
+## INSTALL
+
+If you're interested in supporting another list of domains, feel free to do it with this software, it's licenced under GNU GPL3.
+
+First install the dependencies:
 
 ```bash
 git clone git@github.com:severo/tip_by_domain_renewal.git
 cd tip_by_domain_renewal
 npm install
+```
+
+Update the domains lists (optional):
+
+```
+vi src/domains.json
 ```
 
 Generate `public/index.html` (note that it takes at least 1 minute per domain,
