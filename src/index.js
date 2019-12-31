@@ -1,37 +1,123 @@
-const whois = require('whois-api')
+const whois = require('whois')
+const retry = require('async-retry')
 const fs = require('fs').promises
 const Mustache = require('mustache')
+
+const delayInS = 60
+const delayInMs = delayInS * 1000
+const later = delay => new Promise(resolve => setTimeout(resolve, delay))
 
 const addDate = async rows => {
   const rowsOK = []
   for (const row of rows) {
-    const rowOK = await addDateToRow(row)
-    rowsOK.push(rowOK)
+    try {
+      console.log(
+        `Fetching expiration date from whois request, for domain ${row.domain} (in ${delayInS}s)`
+      )
+      await later(delayInMs) // always wait before trying whois requests
+      const rowOK = await addDateToRow(row)
+      console.log(`  OK: ${row.expirationDate}`)
+      rowsOK.push(rowOK)
+    } catch (e) {
+      // Just log the error in case there is one (for example if the domain is
+      // not from Gandi registrar), don't add the row, and don't throw any
+      // exception
+      console.log('  ERROR: expiration date could not be fetched')
+      console.error(e)
+    }
   }
   return rowsOK
 }
 
 const getClass = days => {
-  return days < 0 ? 'past' : days < 90 ? 'soon' : 'ok'
+  return days < 366 ? 'soon' : 'ok'
 }
 
-const lookup = async domain => {
+const getExpirationDate = async domain => {
+  return retry(
+    async (bail, attemptId) => {
+      // if anything throws, retry
+
+      if (attemptId > 1) {
+        console.log(`  Retry #${attemptId - 1}`)
+      }
+
+      const data = await asyncLookup(domain)
+
+      if (
+        data.indexOf('Your IP has been restricted due to excessive access') !==
+        -1
+      ) {
+        throw new RangeError("Gandi's rate limit has been exceeded.")
+      }
+
+      // Find the registrar
+      const registrarMatch = data.match(/Registrar: (.*)\n/)
+
+      if (!registrarMatch || registrarMatch.length !== 2) {
+        // don't retry if we got a validation error
+        bail(
+          new RangeError(
+            `WHOIS answer is not conform to GANDI whois format: ${data}.`
+          )
+        )
+        return
+      } else if (registrarMatch[1] !== 'GANDI SAS') {
+        // don't retry if we got a validation error
+        bail(
+          new RangeError(
+            `${domain} is registered with ${
+              registrarMatch[1]
+            }. For now, the only supported registrar is Gandi SAS.`
+          )
+        )
+        return
+      }
+
+      // Find the expiration date
+      const dateMatch = data.match(
+        /(Registrar Registration Expiration Date: |Registry Expiry Date: )(.*)(\n)/
+      )
+      if (!dateMatch || dateMatch.length !== 4) {
+        bail(
+          new RangeError(
+            `Cannot parse the expiration date from Gandi WHOIS reponse:\n\n${data}\n\n`
+          )
+        )
+        return
+      }
+
+      return dateMatch[2]
+    },
+    {
+      retries: 3,
+      minTimeout: 2 * delayInMs
+    }
+  )
+}
+
+const asyncLookup = async domain => {
   return new Promise((resolve, reject) => {
-    // to be promisified
-    whois.lookup(domain, function (err, data) {
-      if (err) {
-        reject(err)
+    whois.lookup(
+      domain,
+      {
+        server: 'whois.gandi.net'
+      },
+      function (err, data) {
+        if (err) {
+          // For example, Gandi may cut the TCP connection with the following error:
+          // # Your IP has been restricted due to excessive access, please wait a bit
+          reject(err)
+        }
+        resolve(data)
       }
-      if (data.registrar !== 'Gandi SAS') {
-        reject(new RangeError('For now, the only supported registrar is Gandi'))
-      }
-      resolve(data.expiration_date)
-    })
+    )
   })
 }
 
 const addDateToRow = async row => {
-  row.expirationDate = await lookup(row.domain)
+  row.expirationDate = await getExpirationDate(row.domain)
+
   row.daysLeft = Math.floor(
     (new Date(row.expirationDate) - Date.now()) / (1000 * 60 * 60 * 24)
   )
@@ -40,10 +126,11 @@ const addDateToRow = async row => {
 }
 
 const writeHtml = async (html, dir, filename) => {
-  await fs.mkdir(dir, { recursive: true }, (err) => {
+  await fs.mkdir(dir, { recursive: true }, err => {
     if (err) throw err
   })
-  await fs.writeFile(dir + '/' + filename, html)
+  await fs
+    .writeFile(dir + '/' + filename, html)
     .then(() => console.log('The file was saved!'))
     .catch(console.log)
 }

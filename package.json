@@ -18,8 +18,9 @@
   },
   "homepage": "https://github.com/severo/tip_by_domain_renewal#readme",
   "dependencies": {
+    "async-retry": "^1.2.3",
     "mustache": "^3.1.0",
     "standard": "^14.3.1",
-    "whois-api": "^1.0.2"
+    "whois": "^2.11.0"
   }
 }
