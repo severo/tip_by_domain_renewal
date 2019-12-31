@@ -8,6 +8,9 @@
     <!-- <link rel="stylesheet" href="/bundle.css" />
     <script defer src="/bundle.js"></script> -->
     <style type="text/css">
+    .article-ok {
+      display: none
+    }
     .ok {
       color: #28a745;
       fill: #28a745;
@@ -67,7 +70,7 @@
     Il n'est pas nécessaire d'être propriétaire du domaine pour le renouveler.</p>
 
     {{#domains}}
-    <article>
+    <article class="article-{{class}}">
       <header>
         <h2>
           {{name}}
@@ -90,6 +93,13 @@
         </a>
       </p>
     </article>
+    {{/domains}}
+    {{^domains}}
+      <h2>Tout va bien !</h2>
+
+      <p>Tous les <a href="https://github.com/severo/tip_by_domain_renewal/blob/master/src/domains.json">domaines</a> sont encore valides pendant un an ou plus. Rien à faire pour l'instant !</p>
+
+      <img src='assets/day26-rainbow.svg' max-width="600px"/>
     {{/domains}}
 
   </body>
