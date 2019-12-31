@@ -139,9 +139,20 @@ const run = async () => {
   const text = await fs.readFile('src/domains.json', 'utf8')
   const domains = JSON.parse(text)
   const domainsOK = await addDate(domains)
+  // const domainsOK = []
+  // const domainsOK = [
+  //   { name: 'veill.es', daysLeft: 265 },
+  //   { name: 'spip.org', daysLeft: 79 },
+  //   { name: 'spip.com', daysLeft: 152 },
+  //   { name: 'menteur.com', daysLeft: 67 },
+  //   { name: 'rezo.net', daysLeft: 66 },
+  //   { name: 'seenthis.net', daysLeft: 207 },
+  //   { name: 'framasoft.net', daysLeft: 313 },
+  //   { name: 'laquadrature.net', daysLeft: 76 }
+  // ]
   const template = await fs.readFile('src/index.mustache', 'utf8')
   const html = Mustache.render(template, {
-    domains: domainsOK.sort((a, b) => a.daysLeft > b.daysLeft)
+    domains: domainsOK.sort((a, b) => a.daysLeft - b.daysLeft)
   })
   await writeHtml(html, 'public', 'index.html')
 }
