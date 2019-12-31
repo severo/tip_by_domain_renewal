@@ -14,7 +14,7 @@ cd tip_by_domain_renewal
 npm install
 ```
 
-Update the domains lists (optional):
+Update the [domains lists](./src/domains.json) (optional):
 
 ```
 vi src/domains.json
