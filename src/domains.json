@@ -60,6 +60,12 @@
     "url": "https://seenthis.net"
   },
   {
+    "domain": "seen.li",
+    "name": "Seenthis",
+    "description": "Seenthis (domaine alternatif pour la réduction d'URLs : seen.li).",
+    "url": "https://seenthis.net"
+  },
+  {
     "domain": "framasoft.net",
     "name": "Framasoft",
     "description": "Changer le monde, un octet à la fois",
