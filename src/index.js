@@ -125,13 +125,10 @@ const addDateToRow = async row => {
   return row
 }
 
-const writeHtml = async (html, dir, filename) => {
-  await fs.mkdir(dir, { recursive: true }, err => {
-    if (err) throw err
-  })
-  await fs
-    .writeFile(dir + '/' + filename, html)
-    .then(() => console.log('The file was saved!'))
+const writeHtml = (html, filename) => {
+  fs
+    .writeFile(filename, html)
+    .then(() => console.log(`The file ${filename} has been saved!`))
     .catch(console.log)
 }
 
@@ -152,9 +149,10 @@ const run = async () => {
   // ]
   const template = await fs.readFile('src/index.mustache', 'utf8')
   const html = Mustache.render(template, {
-    domains: domainsOK.sort((a, b) => a.daysLeft - b.daysLeft)
+    domains: domainsOK.sort((a, b) => a.daysLeft - b.daysLeft),
+    date: new Date(Date.now()).toISOString()
   })
-  await writeHtml(html, 'public', 'index.html')
+  writeHtml(html, 'public/index.html')
 }
 
 run()
