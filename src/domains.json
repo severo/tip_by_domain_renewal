@@ -1,35 +1,5 @@
 [
   {
-    "domain": "uzine.net",
-    "name": "uZine",
-    "description": "Les archives du site uZine",
-    "url": "http://www.uzine.net"
-  },
-  {
-    "domain": "veill.es",
-    "name": "veill.es",
-    "description": "Archivage militant",
-    "url": "https://veill.es/"
-  },
-  {
-    "domain": "spip.org",
-    "name": "SPIP",
-    "description": "Le logiciel SPIP (domaine alternatif .org)",
-    "url": "https://www.spip.net/"
-  },
-  {
-    "domain": "spip.com",
-    "name": "SPIP",
-    "description": "Le logiciel SPIP (domaine alternatif .com)",
-    "url": "https://www.spip.net/"
-  },
-  {
-    "domain": "spip.net",
-    "name": "SPIP",
-    "description": "Le logiciel SPIP",
-    "url": "https://www.spip.net/"
-  },
-  {
     "domain": "menteur.com",
     "name": "Les chroniques du menteur",
     "description": "Les archives des chroniques du menteur",
@@ -40,41 +10,5 @@
     "name": "Rezo",
     "description": "Le portail des copains, et son service de listes de diffusion",
     "url": "https://rezo.net"
-  },
-  {
-    "domain": "visionscarto.net",
-    "name": "Visionscarto",
-    "description": "Réseau indépendant de recherche sur les cartes et les représentations",
-    "url": "https://visionscarto.net"
-  },
-  {
-    "domain": "visioncarto.net",
-    "name": "Visionscarto",
-    "description": "Réseau indépendant de recherche sur les cartes et les représentations (domaine alternatif)",
-    "url": "https://visionscarto.net"
-  },
-  {
-    "domain": "seenthis.net",
-    "name": "Seenthis",
-    "description": "Du short-blogging sans limite de caractères. De la recommandation de liens. Des automatismes pour rédiger facilement vos messages. Des forums sous chaque billet. De la veille d’actualité. Une thématisation avancée.",
-    "url": "https://seenthis.net"
-  },
-  {
-    "domain": "seen.li",
-    "name": "Seenthis",
-    "description": "Seenthis (domaine alternatif pour la réduction d'URLs : seen.li).",
-    "url": "https://seenthis.net"
-  },
-  {
-    "domain": "framasoft.net",
-    "name": "Framasoft",
-    "description": "Changer le monde, un octet à la fois",
-    "url": "https://framasoft.org"
-  },
-  {
-    "domain": "laquadrature.net",
-    "name": "La Quadrature du Net",
-    "description": "La Quadrature du Net promeut et défend les libertés fondamentales dans l’environnement numérique. L’association lutte contre la censure et la surveillance, que celles-ci viennent des États ou des entreprises privées. Elle questionne la façon dont le numérique et la société s’influencent mutuellement. Elle œuvre pour un Internet libre, décentralisé et émancipateur.",
-    "url": "https://laquadrature.net"
   }
 ]

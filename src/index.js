@@ -14,10 +14,11 @@ const addDate = async rows => {
       console.log(
         `Fetching expiration date from whois request, for domain ${row.domain} (in ${delayInS}s)`
       )
-      await later(delayInMs) // always wait before trying whois requests
       const rowOK = await addDateToRow(row)
+      console.warn(row)
       console.log(`  OK: ${row.expirationDate}`)
       rowsOK.push(rowOK)
+      await later(delayInMs) // always wait before trying whois requests
     } catch (e) {
       // Just log the error in case there is one (for example if the domain is
       // not from Gandi registrar), don't add the row, and don't throw any
@@ -29,11 +30,11 @@ const addDate = async rows => {
   return rowsOK
 }
 
-const getClass = days => {
-  return days < 366 ? 'soon' : 'ok'
+const getClass = (days, recent) => {
+  return days < 366 ? 'soon' : recent < 7 ? 'recent' : 'ok'
 }
 
-const getExpirationDate = async domain => {
+const getDates = async domain => {
   return retry(
     async (bail, attemptId) => {
       // if anything throws, retry
@@ -86,8 +87,11 @@ const getExpirationDate = async domain => {
         )
         return
       }
+      const updatedMatch = data.match(
+        /(Updated Date: )(.*)(\n)/
+      )
 
-      return dateMatch[2]
+      return {updated: updatedMatch && updatedMatch[2], expiration: dateMatch[2]}
     },
     {
       retries: 3,
@@ -116,12 +120,20 @@ const asyncLookup = async domain => {
 }
 
 const addDateToRow = async row => {
-  row.expirationDate = await getExpirationDate(row.domain)
+  const {updated, expiration} = await getDates(row.domain)
+  row.expirationDate = expiration
+  row.updatedDate = updated
 
   row.daysLeft = Math.floor(
     (new Date(row.expirationDate) - Date.now()) / (1000 * 60 * 60 * 24)
   )
-  row.class = getClass(row.daysLeft)
+  row.updatedDays = Math.floor(
+    -(new Date(row.updatedDate) - Date.now()) / (1000 * 60 * 60 * 24)
+  )
+  row.class = getClass(row.daysLeft, row.updatedDays)
+
+console.warn(row)
+
   return row
 }
 
@@ -132,27 +144,38 @@ const writeHtml = (html, filename) => {
     .catch(console.log)
 }
 
-const run = async () => {
-  const text = await fs.readFile('src/domains.json', 'utf8')
-  const domains = JSON.parse(text)
-  const domainsOK = await addDate(domains)
-  // const domainsOK = []
-  // const domainsOK = [
-  //   { name: 'veill.es', daysLeft: 265 },
-  //   { name: 'spip.org', daysLeft: 79 },
-  //   { name: 'spip.com', daysLeft: 152 },
-  //   { name: 'menteur.com', daysLeft: 67 },
-  //   { name: 'rezo.net', daysLeft: 66 },
-  //   { name: 'seenthis.net', daysLeft: 207 },
-  //   { name: 'framasoft.net', daysLeft: 313 },
-  //   { name: 'laquadrature.net', daysLeft: 76 }
-  // ]
+const run = async (domains) => {
+  if (!domains)
+    domains = await fs
+    .readFile('src/domains.json', 'utf8')
+    .then(JSON.parse)
+    .then(addDate);
+
+  const recent = domains.filter(d => d.recent < 10007).sort((a, b) => a.recent - b.recent);
+
+
   const template = await fs.readFile('src/index.mustache', 'utf8')
   const html = Mustache.render(template, {
-    domains: domainsOK.sort((a, b) => a.daysLeft - b.daysLeft),
+    domains: domains.filter(d => d.class === "soon").sort((a, b) => a.daysLeft - b.daysLeft),
+    recent,
+    hasRecent: recent.length > 0,
     date: new Date(Date.now()).toISOString()
   })
   writeHtml(html, 'public/index.html')
 }
 
+
+const test = [
+  { name: 'veill.es', daysLeft: 265, class: "soon" },
+  { name: 'spip.org', daysLeft: 79, class: "soon" },
+  { name: 'spip.com', daysLeft: 152, class: "soon" },
+  { name: 'menteur.com', daysLeft: 67, class: "soon" },
+  { name: 'rezo.net', daysLeft: 660, recent: 3, class: "recent" },
+  { name: 'seenthis.net', daysLeft: 2007, recent: 456, class: "ok" },
+  { name: 'framasoft.net', daysLeft: 313, recent: 3, class: "recent" },
+  { name: 'laquadrature.net', daysLeft: 76, class: "soon" }
+]
+
+// run(test)
 run()
+
