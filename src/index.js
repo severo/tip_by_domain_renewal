@@ -132,8 +132,6 @@ const addDateToRow = async row => {
   )
   row.class = getClass(row.daysLeft, row.updatedDays)
 
-console.warn(row)
-
   return row
 }
 
@@ -151,7 +149,7 @@ const run = async (domains) => {
     .then(JSON.parse)
     .then(addDate);
 
-  const recent = domains.filter(d => d.recent < 10007).sort((a, b) => a.recent - b.recent);
+  const recent = domains.filter(d => d.updatedDays < 7).sort((a, b) => a.recent - b.recent);
 
 
   const template = await fs.readFile('src/index.mustache', 'utf8')
@@ -170,9 +168,9 @@ const test = [
   { name: 'spip.org', daysLeft: 79, class: "soon" },
   { name: 'spip.com', daysLeft: 152, class: "soon" },
   { name: 'menteur.com', daysLeft: 67, class: "soon" },
-  { name: 'rezo.net', daysLeft: 660, recent: 3, class: "recent" },
-  { name: 'seenthis.net', daysLeft: 2007, recent: 456, class: "ok" },
-  { name: 'framasoft.net', daysLeft: 313, recent: 3, class: "recent" },
+  { name: 'rezo.net', daysLeft: 660, updatedDays: 3, class: "recent" },
+  { name: 'seenthis.net', daysLeft: 2007, updatedDays: 456, class: "ok" },
+  { name: 'framasoft.net', daysLeft: 313, updatedDays: 3, class: "recent" },
   { name: 'laquadrature.net', daysLeft: 76, class: "soon" }
 ]
 
