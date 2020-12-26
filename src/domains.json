@@ -64,5 +64,11 @@
     "name": "La Quadrature du Net",
     "description": "La Quadrature du Net promeut et défend les libertés fondamentales dans l’environnement numérique. L’association lutte contre la censure et la surveillance, que celles-ci viennent des États ou des entreprises privées. Elle questionne la façon dont le numérique et la société s’influencent mutuellement. Elle œuvre pour un Internet libre, décentralisé et émancipateur.",
     "url": "https://laquadrature.net"
+  },
+  {
+    "domain": "lmsi.net",
+    "name": "Les mots sont importants",
+    "description": "“À notre époque, les discours et les écrits politiques sont pour l’essentiel une défense de l’indéfendable. (…) Le langage politique consiste pour une grande part en euphémismes, pétitions de principe et pure confusion.” — Cette phrase de George Orwell guide la démarche de LMSI.net contre la novlangue.",
+    "url": "https://lmsi.net"
   }
 ]
